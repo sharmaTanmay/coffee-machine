@@ -40,5 +40,16 @@ public class CoffeeServiceTests {
 		verify(this.inventory).deduct("sugar", 1);
 		verify(this.inventory).deduct("cream", 1);
 	}
+	
+	@Test
+	public void addDrink() {
+		Map<String, Double> menu = this.machine.getMenu();
+		Drink frappe = new Drink();
+		frappe.setName("frappe");
+		frappe.setCost(3.00);
+		this.machine.addDrink(frappe);
+		assertThat(menu).contains(entry("frappe", 3.0));
+		
+	}
 
 }
