@@ -8,11 +8,33 @@ public class CoffeeService {
 	private Inventory inventory;
 
 	public CoffeeService(Inventory inventory) {
+		this();
 		this.inventory = inventory;
 	}
-	
+
 	private Map<String, Drink> recipes = new HashMap<String, Drink>();
 	private Map<String, Double> menu = new HashMap<String, Double>();
+
+	/** Constructor to load all the recipes
+	 * 
+	 */
+	public CoffeeService() {
+		Map<String, Integer> coffeeIngredients = new HashMap<String, Integer>();
+		coffeeIngredients.put("coffee", 2);
+		coffeeIngredients.put("sugar", 1);
+		Map<String, Integer> caffeMochaIngredients = new HashMap<String, Integer>();
+		caffeMochaIngredients.put("coffee", 1);
+		caffeMochaIngredients.put("sugar", 1);
+		caffeMochaIngredients.put("cream", 1);
+		Map<String, Integer> cappuccinoIngredients = new HashMap<String, Integer>();
+		cappuccinoIngredients.put("coffee", 2);
+		cappuccinoIngredients.put("sugar", 1);
+		cappuccinoIngredients.put("cream", 1);
+		recipes.put("coffee", makeDrinkRecipe("coffee", 2.75, coffeeIngredients));
+		recipes.put("caffe mocha", makeDrinkRecipe("caffe mocha", 3.90, caffeMochaIngredients));
+		recipes.put("cappuccino", makeDrinkRecipe("cappuccino", 2.90, cappuccinoIngredients));
+
+	}
 
 	/**
 	 * Returns the menu for this coffee machine.
@@ -20,7 +42,7 @@ public class CoffeeService {
 	 * @return a map of drink name to drink cost
 	 */
 	public Map<String, Double> getMenu() {
-		for (Map.Entry<String, Drink> recipe : getRecipes().entrySet()) {
+		for (Map.Entry<String, Drink> recipe : recipes.entrySet()) {
 			menu.put(recipe.getKey(), recipe.getValue().getCost());
 		}
 		return menu;
@@ -33,73 +55,33 @@ public class CoffeeService {
 	 * @param name the name of the drink
 	 */
 	public Drink makeDrink(String name) {
-		Map<String, Drink> allRecipes = getRecipes();
-		Drink drink = allRecipes.get(name);
+		Drink drink = recipes.get(name);
 		for (Map.Entry<String, Integer> ingredient : drink.getIngredients().entrySet()) {
 			inventory.deduct(ingredient.getKey(), ingredient.getValue());
 		}
 		return drink;
 	}
 
-	/** Get the recipes for Coffee, Cappuccino and Caffe Mocha.
+	/**
+	 * Making recipes for coffee, cappuccino and caffe mocha
 	 * 
-	 * @return a map containing all the drinks and their ingredients.
+	 * @param drinkName   name of the drink
+	 * @param drinkCost   cost of the drink
+	 * @param ingredients ingredients of the drink
+	 * 
+	 * @return drink with its recipe
 	 */
-	public Map<String, Drink> getRecipes() {
-		recipes.put("coffee", coffeeRecipe());
-		recipes.put("caffe mocha", caffeMochaRecipe());
-		recipes.put("cappuccino", cappuccinoRecipe());
-		return recipes;
+	public Drink makeDrinkRecipe(String drinkName, Double drinkCost, Map<String, Integer> ingredients) {
+		Drink drink = new Drink();
+		drink.setName(drinkName);
+		drink.setCost(drinkCost);
+		drink.setIngredients(ingredients);
+		return drink;
 	}
 
-	/** Make coffee recipe 
+	/**
+	 * Adds a new drink to the menu
 	 * 
-	 * @return coffee drink
-	 */
-	public Drink coffeeRecipe() {
-		Drink coffee = new Drink();
-		Map<String, Integer> ingredients = new HashMap<String, Integer>();
-		ingredients.put("coffee", 2);
-		ingredients.put("sugar", 1);
-		coffee.setName("coffee");
-		coffee.setCost(2.75);
-		coffee.setIngredients(ingredients);
-		return coffee;
-	}
-
-	/** Make caffe mocha recipe
-	 * 
-	 * @return caffe mocha drink
-	 */
-	public Drink caffeMochaRecipe() {
-		Drink caffeMocha = new Drink();
-		Map<String, Integer> ingredients = new HashMap<String, Integer>();
-		ingredients.put("coffee", 1);
-		ingredients.put("sugar", 1);
-		ingredients.put("cream", 1);
-		caffeMocha.setName("caffe mocha");
-		caffeMocha.setCost(3.90);
-		caffeMocha.setIngredients(ingredients);
-		return caffeMocha;
-	}
-
-	/** Make Cappuccino recipe
-	 * 
-	 * @return cappuccino drink
-	 */
-	public Drink cappuccinoRecipe() {
-		Drink cappuccino = new Drink();
-		Map<String, Integer> ingredients = new HashMap<String, Integer>();
-		ingredients.put("coffee", 2);
-		ingredients.put("sugar", 1);
-		ingredients.put("cream", 1);
-		cappuccino.setName("cappuccino");
-		cappuccino.setCost(2.90);
-		cappuccino.setIngredients(ingredients);
-		return cappuccino;
-	}
-	
-	/** Adds a new drink to the menu
 	 * @param drink drink object containing the new drink details
 	 */
 	public void addDrink(Drink drink) {
