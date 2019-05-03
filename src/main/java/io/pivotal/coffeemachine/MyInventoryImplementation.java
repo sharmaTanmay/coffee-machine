@@ -3,7 +3,7 @@ package io.pivotal.coffeemachine;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MyInventoryImplementation implements Inventory{
+public class MyInventoryImplementation implements Inventory {
 	
 	private Map<String, Integer> ingredients =  new HashMap<String, Integer>();
 	

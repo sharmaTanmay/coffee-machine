@@ -6,16 +6,16 @@ import java.util.Map;
 public class CoffeeService {
 
 	private Inventory inventory;
+	private Map<String, Drink> recipes = new HashMap<String, Drink>();
+	private Map<String, Double> menu = new HashMap<String, Double>();
 
 	public CoffeeService(Inventory inventory) {
 		this();
 		this.inventory = inventory;
 	}
 
-	private Map<String, Drink> recipes = new HashMap<String, Drink>();
-	private Map<String, Double> menu = new HashMap<String, Double>();
-
-	/** Constructor to load all the recipes
+	/**
+	 * Constructor to load all the recipes
 	 * 
 	 */
 	public CoffeeService() {
